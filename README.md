@@ -94,6 +94,48 @@
         
     6.4）IS NULL 找空值
  
-7. WHERE + （AND/OR/IN/NOT）
+7. WHERE + （AND/OR/IN/NOT）高级搜索 + 组合
 
-7. WHERE + AND/OR/IN/NOT
+    7.1 [AND]
+        SELECT prod_name，prod_price, vend_id
+        FROM products
+        WHERE vend_id = 1003 AND prod_price <= 10； 
+                // 同时满足，并列出。 where里面的元素不一定要SELECT
+        
+        [OR]
+        SELECT prod_name，prod_price, vend_id
+        FROM products
+        WHERE vend_id = 1003 OR prod_price <= 10； 
+                // 满足一个即可
+                
+        [AND + OR] 顺序
+        SELECT prod_name，prod_price, vend_id
+        FROM products
+        WHERE vend_id = 1003 OR vend_id = 1002 AND prod_price <= 10； 
+        
+        WHERE (vend_id = 1003 OR vend_id = 1002) AND prod_price <= 10； 
+        
+                // 由于AND 高于 OR， 如果没有括号
+                // 那么第一行则为vend-id = 1002 and prod-price <= 10  
+                
+    7.2 IN ( range, range)
+        SELECT prod_name，prod_price, vend_id
+        FROM products
+        WHERE vend_id IN (1002, 1003)
+        ORDER BY prod_name；     // (1002, 1003, 1004)
+    
+    7.3 NOT (IN) = rule out
+        SELECT prod_name，prod_price, vend_id
+        FROM products
+        WHERE vend_id NOT IN (1002, 1003)
+        ORDER BY prod_name；     // 除了 ID=1002, 1003 的， 其他都出来
+        
+    
+8. LIKE = Wild card - 筛选信息，注意和 REGEXP区别
+
+    8.1 LIKE 
+    
+    8.2
+
+9. REGEXP 正则表达 - 也是筛选，注意和 LIKE区别
+    9.1 LIKE 正则
