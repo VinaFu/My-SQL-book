@@ -131,11 +131,65 @@
         ORDER BY prod_name；     // 除了 ID=1002, 1003 的， 其他都出来
         
     
-8. LIKE = Wild card - 筛选信息，注意和 REGEXP区别
-
-    8.1 LIKE 
+8. LIKE = Wild card - 筛选信息+ % or _，注意和 REGEXP区别
+    8.1 LIKE + ' % '
+        SELECT prod_name，prod_price
+        FROM products
+        WHERE prod_name LIKE 'jet%'；
+                // 从products里面选两项，其中name里面含有jet。。
+                // Output： Jetpack 1000
+                //          Jetpack 2000
+            
+        SELECT prod_name，prod_price
+        FROM products
+        WHERE prod_name LIKE '%anvil%'；
+                // 前后都有元素，也包括空格，见下部分
+                // Output： 0.5 ton anvil
+                //          1 ton anvil 
+                //          2 ton anvil
+        
+        SELECT prod_name，prod_price
+        FROM products
+        WHERE prod_name LIKE 's%e'；
+                // Output： same
+                //          sale 
+                //          swhatevere
     
-    8.2
+    
+    8.2 LIKE + ' _ ' （underscore）
+        SELECT prod_name，prod_price
+        FROM products
+        WHERE prod_name LIKE '_ ton anvil'；
+                // 但是_ 是单个占位符。只表示一个
+                // Output： 
+                //          1 ton anvil 
+                //          2 ton anvil
+        
+        SELECT prod_name，prod_price
+        FROM products
+        WHERE prod_name LIKE '% ton anvil'；
+                // Output： 0.5 ton anvil %配对个字符
+                //          1 ton anvil 
+                //          2 ton anvil
+        不要过度使用通配符
 
 9. REGEXP 正则表达 - 也是筛选，注意和 LIKE区别
     9.1 LIKE 正则
+
+10. 
+
+11.
+
+12.
+
+13.
+
+14.
+
+15.
+
+16.
+
+17.
+
+18. 
