@@ -173,10 +173,100 @@
                 //          2 ton anvil
         不要过度使用通配符
 
-9. REGEXP 正则表达 - 也是筛选，注意和 LIKE区别
-    9.1 LIKE 正则
+9. REGEXP 正则表达 - 也是筛选 (regular expression)
+   注意和 LIKE区别 以及 OR情况的使用
 
-10. 
+    9.1 REGEXP
+        SELECT prod_name
+        FROM products
+        WHERE prod_name REGEXP '1000'
+        ORDER BY prod_name；
+                // Output： prod_name
+                //          Jetpack 1000 
+                
+        SELECT prod_name
+        FROM products
+        WHERE prod_name REGEXP '000'
+        ORDER BY prod_name；
+                // Output： prod_name
+                //          Jetpack 1000 
+                //          Jetpack 2000
+                
+        ***
+        TIPS： LIKE 和 REXGEXP的区别
+        WHERE prod_name LIKE '1000'： 什么都不返回，需要配合%使用
+        WHERE prod_name REGEXP '1000'：只要有1000就返回。
+        So REGEXP = 1000% + %1000 + %1000%
+                
+    9.2 REGEXP + OR: '|', [123] ton,etc.
+        SELECT prod_name
+        FROM products
+        WHERE prod_name REGEXP '1000|2000'
+        ORDER BY prod_name；
+                // Output： prod_name
+                //          Jetpack 1000 
+                //          Jetpack 2000 
+        
+        SELECT prod_name
+        FROM products
+        WHERE prod_name REGEXP '[123] ton'
+        ORDER BY prod_name；
+                // 注意：他们之间没有逗号，但还是 或 的意思
+                // Output： prod_name
+                //          1 ton anvil 
+                //          2 ton anvil
+                
+        SELECT prod_name
+        FROM products
+        WHERE prod_name REGEXP '1|2|3 ton'
+        ORDER BY prod_name；
+                // 注意：这里表示：1 或 2 或 3 ton，所以不一样
+                // Output： prod_name
+                //          1 ton anvil 
+                //          2 ton anvil
+                //          Jetpack 1000 
+                //          Jetpack 2000    
+             
+        
+        SELECT prod_name
+        FROM products
+        WHERE prod_name REGEXP '[1-5] ton'
+        ORDER BY prod_name；
+                // 表示范围。你看：不要用数学思维哦，0.5 ton后面也符合哦！！！
+                // Output： prod_name
+                //          .5 ton anvil
+                //          1 ton anvil 
+                //          2 ton anvil
+                
+    9.3 匹配特殊字符：'.', '\\.', '\\\', '\\_' 
+    
+        SELECT vend_name
+        FROM vendors
+        WHERE vend_name REGEXP '.'
+        ORDER BY vend_name；
+                // . 表示匹配任何字符
+                // Output： prod_name
+                //          ACME 
+                //          Furball Inc.
+                
+        SELECT vend_name
+        FROM vendors
+        WHERE vend_name REGEXP '\\.'
+        ORDER BY vend_name；
+                // Output： prod_name
+                //          Furball Inc.
+            
+        OTHERS: \\f 换页
+                \\n 换行
+                \\r 回车
+                \\t 制表
+                \\v 纵向制表
+                
+    9.4 匹配字符类 
+    9.5
+    9.6 定位
+    
+10. 创建计算字段：CONCAT， AS
 
 11.
 
