@@ -266,6 +266,7 @@
     concatenate - 拼接；AS - 新建一个column。
     
     10.1 Concat()其它DBMS用 + ｜｜来实现。
+    
         SELECT Concat(vend_name, '(', vend_country, ')')
         FROM vendors
         ORDER BY vend_name;
@@ -283,6 +284,7 @@
             // 刚刚连在一起的内容放到新表格里：vend_title 里面
     
     10.2 Calculation of data
+    
         SELECT prod_id, 
                quantity, 
                item_price, 
@@ -291,15 +293,18 @@
         WHERE order_num = 20005;
             // 为了方便看，写成了竖向；最后一行方便运算；运算结果放在新格子里    
 
+
 11. 使用函数（Soundex()；AddDate()）
 
     11.1 文本处理    left(), RTrim(), Lower(), Soundex()）
+    
         SELECT cust_name, cust_contact
         FROM customers
         WHERE Soundex(cust_contact) = Soundex('Y Lie');
             // Soundex()匹配所有发音类似 Y.lie 的联系名,避免出错。比如拼写成了 Y Lee。
         
     11.2 日期和时间处理函数
+    
         SELECT cust_id, order_num
         FROM orders
         WHERE Date(order_date) = '2005-09-01';
@@ -316,12 +321,14 @@
             // 也可以匹配时间范围
      
     11.3 数值处理函数
+    
         和python很像：Abs()， Tan(), Sqrt()
 
 12. 汇总数据，这边处理过的数据都放在新的column里面
     aggregate function - 聚集函数
     
     12.1 AVG()
+    
         SELECT AVG(prod_prices) AS avg_price
         FROM products;
         (WHERE vend_id = 1003;)
@@ -329,6 +336,7 @@
             // 加了WHERE特指ID=1003的平均值
     
     12.2 COUNT()
+    
         SELECT COUNT(*) AS num_cust
         FROM customers;
             // COUNT(*) 所有数目计数，哪怕空值（NULL）占位
@@ -337,12 +345,14 @@
     12.3 MAX（）， MIN（）， SUM（）-这个一般会带一个WHERE
     
     12.4 DISRTINCT： 去重
+    
         SELECT AVG(DISTINCT prod_prices) AS avg_price
         FROM products
         WHERE vend_id = 1003
             // 放在括号里。那么重复数据只用一次
             
     12.5 多个函数连用
+    
         SELECT COUNT(*) AS num_items,
                MIN(prod_price) AS price_min,
                MAX(prod_price) AS price_max,
