@@ -292,6 +292,7 @@
             // 为了方便看，写成了竖向；最后一行方便运算；运算结果放在新格子里    
 
 11. 使用函数（Soundex()；AddDate()）
+
     11.1 文本处理    left(), RTrim(), Lower(), Soundex()）
         SELECT cust_name, cust_contact
         FROM customers
@@ -347,7 +348,7 @@
                MAX(prod_price) AS price_max,
                AVG(prod_price) AS price_avg
         FROM products;
-            // 因为很多，所以竖向排列，也方便看
+          // 因为很多，所以竖向排列，也方便看
     
 13.
 
