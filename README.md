@@ -407,9 +407,57 @@
             // order最后，因为处理好了之后排序才有意义呀。排序费时
         LIMIT
 
-14.
+14. 子查询Sub query/SQL Server -- IN
+    MySQL子查询是嵌套在另一个查询，类似定语从句。IN方便我们找范围
+    
+    14.1 定语从句合并
+    
+        SELECT order_num
+        FROM orderitems
+        WHERE prod_id = 'TNT2';
+
+        SELECT cust_id
+        FROM orders
+        WHERE order_num IN (20005, 20007);
+
+        SELECT cust_id
+        FROM orders
+        WHERE order_num IN (SELECT order_num
+                            FROM orderitems
+                            WHERE prod_id = 'TNT2');
+           // 由内向外（）查询，所以先选 prod_id = 'TNT2'；
+           // 在上面的范围里找符合条件的 cust_id
+
+        SELECT cust_name, cust_contact 
+        FROM customers
+        WHERE cust_id IN (SELECT cust_id
+                          FROM orders
+                          WHERE order_num IN (SELECT order_num
+                                              FROM orderitems
+                                              WHERE prod_id = 'TNT2'));
+           // 在刚刚的基础上找客户姓名和联系方式，套娃～
+           // 子查询不限制嵌套子查询数目，但还是不要写太多
+        
+    14.2 计算字段使用 COUNT
+        涉及correlated subquery:即外部查询的子查询
+        
+        SELECT COUNT(*) AS orders
+        FROM orders
+        WHERE cust_id = 10001
+        
+        SELECT cust_name,
+               cust_state,
+               (SELECT COUNT(*)
+                FROM orders
+                WHERE orders.cust_id = customers.cust_id) AS orders
+                    // 完全限定列名
+        FROM customers
+        ORDER BY cust_name;
+    （p95 未完成❎）
+    14.3 
 
 15.
+    (如SELECT，INSERT，UPDATE或DELETE)中的查询。
 
 16.
 
