@@ -360,7 +360,52 @@
         FROM products;
           // 因为很多，所以竖向排列，也方便看
     
-13.
+13. 分组数据
+    COUNT（*）计数； GROUP BY分组，知道每一具体项的数字
+    
+    13.1 GROUP BY 分别计数
+    
+        SELECT vend_id, COUNT(*) AS num_prods 
+        FROM products
+        GROUP BY vend_id;
+            // WHERE > GROUP BY > ORDER BY
+        
+    13.2 HAVING 过滤分组（与WHERE有区别）
+    
+        SELECT cust_id, COUNT(*) AS orders 
+        FROM orders
+        GROUP BY cust_id
+        HAVING COUNT(*) >= 2;
+            // WHERE一般过滤行，having过滤分组（计数？）
+    
+        SELECT vend_id, COUNT(*) AS num_prods 
+        FROM products
+        WHERE prod_price >= 10
+        GROUP BY vend_id
+        HAVING COUNT(*) >= 2;
+            // 先选单价 >= 10；分别计数；计数里 >= 2
+            
+    13.3 GROUP BY 和 ORDER BY需要同时使用，确保排序
+    
+        SELECT order_num, 
+               SUM(quantity * item_price) AS ordertotal
+        FROM orderitems
+        GROUP BY order_num
+        HAVING SUM(quantity * item_price) >= 50
+        ORDER BY order_num;
+            // ⚠️ WHERE 和 HAVING 都❌使用别名（AS）
+     
+    13.4 SELECT 顺序
+    
+        SELECT
+        FROM
+        WHERE
+            // 以上常规
+        GROUP BY 
+        HAVING
+        ORDER BY 
+            // order最后，因为处理好了之后排序才有意义呀。排序费时
+        LIMIT
 
 14.
 
