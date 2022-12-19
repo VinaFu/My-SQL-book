@@ -437,6 +437,7 @@
                                               WHERE prod_id = 'TNT2'));
            // 在刚刚的基础上找客户姓名和联系方式，套娃～
            // 子查询不限制嵌套子查询数目，但还是不要写太多
+           // 下面见到的联结或更好一些
         
     14.2 计算字段使用 COUNT
         涉及correlated subquery:即外部查询的子查询
@@ -450,16 +451,100 @@
                (SELECT COUNT(*)
                 FROM orders
                 WHERE orders.cust_id = customers.cust_id) AS orders
-                    // 完全限定列名
+                    // 完全限定列名：在不同列表中会有同样的名字
         FROM customers
         ORDER BY cust_name;
-    （p95 未完成❎）
-    14.3 
+        
+15. 联结表 - JOIN 
+    把信息从多个/关联表格column里取出来。如：客户名为。。的货号。。等
+    外键 foreign key是联结的关键； 可伸缩性 scale
+    
+    15.1 建立联结
+    
+        SELECT vend_name, prod_name, prod_price
+        FROM vendors, products
+        WHERE vendors.vend_id = products.vend_id
+        ORDER BY vend_name, prod_name;
+            // 在vend 和 product两个表里，共有vend.id，可连
+            // 用完全限定名 WHERE很重要，见下
+    
+        Cartesian product 笛卡尔积 么得WHERE
+        如果上述代码没有WHERE，则检索出来的行数是第一个行 X 第二个：不管配对。即：vend.name跑一遍，再prod.name跑一遍。毫无逻辑子
+    
+    15.2 内部联结 INNER JOIN 。。。 ON; equijoin
+    
+        SELECT vend_name, prod_name, prod_price
+        FROM vendors INNER JOIN products
+        ON vendors.vend_id = products.vend_id;
+            // 和上面一样，不过突出了是内部的结构。
+            // INNER JOIN 。。。 ON - 完全限定
+         
+     15.3 联结多个联结  
+        
+        SELECT prod_name, vend_name, prod_price, quantity
+        FROM orderitems, products, vendors
+        WHERE vendors.vend_id = products.vend_id
+            AND orderitems.prod_id = products.prod_id
+            AND order_num = 2005;
+                // 显示编号20005的货品。
+                // 看两两表格间的联结是什么     
+                
+        回顾 子查询（定语从句）：
+        SELECT cust_name, cust_contact 
+        FROM customers
+        WHERE cust_id IN (SELECT cust_id
+                          FROM orders
+                          WHERE order_num IN (SELECT order_num
+                                              FROM orderitems
+                                              WHERE prod_id = 'TNT2'));
+                                              
+        SELECT cust_name, cust_contact（cust_id, order_num）
+        FROM customers, orders, orderitems
+        WHERE  customers.cust_id = orders.cust_id
+            AND orders.order_num = orderitems.order_num
+            AND prod_id = 'TNT2';
+                // 非常棒！写对啦！
+                // 但是注意，我们要的只是名+名；后面两个只是帮助定位
 
-15.
-    (如SELECT，INSERT，UPDATE或DELETE)中的查询。
-
-16.
+16. 高级联结
+    
+    16.1 使用表别名 AS - 常见缩写
+    
+        SELECT Concat(RTrim(vend_name),'(', RTrim(vend_country), ')') AS vend_title
+        FROM vendors
+        ORDER BY vend_name;
+            // 缩短mysql语句
+            // 允许在SELECT语句中多次使用相同表。主要见下面
+            
+        SELECT cust_name, cust_contact
+        FROM customers AS c, orders AS o, orderitems AS oi
+        WHERE c.cust_id = o.cust_id
+            AND oi.order_num = o.order_num
+            AND prod_id = 'TNT2';
+    
+       别名 - 内部引用时不会弄混
+        
+        SELECT prod_id, prod_name
+        FROM products
+        WHERE vend_id = (
+                         SELECT vend_id
+                         FROM products
+                         WHERE prod_id = 'DTNR');
+                         
+        SELECT prod_id, prod_name
+        FROM products AS p1, products AS p2
+        WHERE p1.vend_id = p2.vend_id
+            AND p2.prod_id = 'DTNR';
+                    //   WHERE products.vend_id = products.vend_id用两次没有语法问题，但是mysql不知道我引用的是哪一个，所以分别定义。
+                    //⚠️ 我们是从FROM开始定义 p1 和 p2
+                    // 看好是哪里的prod.id = DTNR。
+                                   
+    16.2  
+    
+    
+    16.3 
+    
+    
 
 17.
 
