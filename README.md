@@ -522,7 +522,7 @@
             AND oi.order_num = o.order_num
             AND prod_id = 'TNT2';
     
-       别名 - 内部引用时不会弄混
+       别名 - 内部引用/自联结时不会弄混
         
         SELECT prod_id, prod_name
         FROM products
@@ -540,7 +540,13 @@
                     // 看好是哪里的prod.id = DTNR。
                                    
     16.2  
-    
+        SELECT c.*, o.order_num, o.order_date,
+            oi.pro_id, oi.quantity, OI.item_price
+        FROM customers AS c, orders AS o, orderitems AS oi
+        WHERE c.cust_id = o.cust_id
+            AND oi.order_num = o.order_num
+            AND prod_id = 'FB';
+    (P109 - 没完。什么*？)
     
     16.3 
     
